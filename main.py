@@ -8,6 +8,7 @@ import torchvision.transforms as transforms
 import torch.optim as optim
 import sys
 import net
+import faceData
 
 
 def main():
@@ -15,28 +16,34 @@ def main():
 
     pass
 
-transform = transforms.Compose(
-    [transforms.ToTensor(),
-     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+transform = transforms.Compose([
+    transforms.ToPILImage(),
+    transforms.Resize((512,640)),
+    transforms.ToTensor(),
+     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))],
+     )
 
 batch_size = 4
 
 # This gets the data set?
-trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
-                                        download=True, transform=transform)
+
+trainset = faceData.CustomImageDataset("./data/labels.csv", "./data/images", transform=transform)
 # This loads it into torch to train?
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
                                           shuffle=True, num_workers=2)
 
+
+
 # Tests the accuracy
-testset = torchvision.datasets.CIFAR10(root='./data', train=False,
-                                       download=True, transform=transform)
+# testset = torchvision.datasets.CIFAR10(root='./data', train=False,
+#                                        download=True, transform=transform)
+
+testset = faceData.CustomImageDataset("./data/train.csv", "./images/training", transform=transform)
 
 testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
                                          shuffle=False, num_workers=2)
 
-classes = ('plane', 'car', 'bird', 'cat',
-           'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+classes = ('Not Steve', 'Steve')
 
 
 
@@ -52,7 +59,7 @@ dataiter = iter(trainloader)
 images, labels = next(dataiter)
 
 # show images
-imshow(torchvision.utils.make_grid(images))
+# imshow(torchvision.utils.make_grid(images))
 # print labels
 print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size)))
 
@@ -90,7 +97,7 @@ for epoch in range(2):  # loop over the dataset multiple times
 print('Finished Training')
 
 # Saves the model, that's cool.
-PATH = './cifar_net.pth'
+PATH = './steve.pth'
 torch.save(net.state_dict(), PATH)
 
 
@@ -101,7 +108,7 @@ images, labels = next(dataiter)
 imshow(torchvision.utils.make_grid(images))
 print('GroundTruth: ', ' '.join(f'{classes[labels[j]]:5s}' for j in range(4)))
 
-net = Net()
+net = net.Net()
 net.load_state_dict(torch.load(PATH, weights_only=True))
 
 outputs = net(images)

@@ -1,7 +1,12 @@
 import os
 import pandas as pd
 from torchvision.io import read_image
-from torchvision import Dataset
+from torch.utils.data.dataset import Dataset
+
+labels_map = {
+    0: "Not Steve",
+    1: "Steve"
+}
 
 class CustomImageDataset(Dataset):
     def __init__(self, annotations_file, img_dir, transform=None, target_transform=None):
