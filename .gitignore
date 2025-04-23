@@ -1,2 +1,9 @@
 vgg_face2/*
 __pycache__/net.cpython-310.pyc
+lfw_funneled/*
+pairs.txt
+pairsDevTest.txt
+pairsDevTrain.txt
+pairs.txt
+pairsDevTest.txt
+pairsDevTrain.txt
