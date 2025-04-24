@@ -8,3 +8,5 @@ pairsDevTest.txt
 pairsDevTrain.txt
 data/*
 __pycache__/*
+rawVideo/*
+rawScreenshots/*
