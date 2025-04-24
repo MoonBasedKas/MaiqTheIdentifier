@@ -9,6 +9,7 @@ import torch.optim as optim
 import sys
 import net
 import faceData
+import os 
 
 
 def main():
@@ -18,35 +19,37 @@ def main():
 
 transform = transforms.Compose([
     transforms.ToPILImage(),
-    transforms.Resize((512,640)),
+    transforms.Resize((28,28)),
     transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))],
      )
+
+# transform = transforms.ToTensor()
 
 batch_size = 4
 
 # This gets the data set?
 
-trainset = faceData.CustomImageDataset("./data/labels.csv", "./data/images", transform=transform)
+trainset = faceData.CustomImageDataset(f"data{os.sep}labels.csv", f"data{os.sep}images", transform=transform)
 # This loads it into torch to train?
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
-                                          shuffle=True, num_workers=2)
-
+                                          shuffle=True)
+# num_workers=2
 
 
 # Tests the accuracy
 # testset = torchvision.datasets.CIFAR10(root='./data', train=False,
 #                                        download=True, transform=transform)
 
-testset = faceData.CustomImageDataset("./data/train.csv", "./images/training", transform=transform)
+testset = faceData.CustomImageDataset(f".{os.sep}data{os.sep}train.csv", f".{os.sep}images{os.sep}training", transform=transform)
 
 testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
-                                         shuffle=False, num_workers=2)
+                                         shuffle=False)
 
 classes = ('Not Steve', 'Steve')
 
 
-
+# Colored images have 3 channels
 def imshow(img):
     img = img / 2 + 0.5     # unnormalize
     npimg = img.numpy()
@@ -57,16 +60,24 @@ def imshow(img):
 # get some random training images
 dataiter = iter(trainloader)
 images, labels = next(dataiter)
+# Gets me my shape fo
+print(images.shape)
+# tset, vset = torch.utils.random_split(trainset, [5,3]) # Splits the dataset
+
+print(torch.min(images), torch.max(images))
 
 # show images
-# imshow(torchvision.utils.make_grid(images))
+print(len(trainset))
+imshow(torchvision.utils.make_grid(images))
 # print labels
 print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size)))
 
 # Creates the neural network.
 
 
-net = net.Net()
+net = net.neuralNet()
+# net.to(device) # Enables gpu
+
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
@@ -75,6 +86,7 @@ optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 for epoch in range(2):  # loop over the dataset multiple times
 
     running_loss = 0.0
+    # Training layer
     for i, data in enumerate(trainloader, 0):
         # get the inputs; data is a list of [inputs, labels]
         inputs, labels = data
