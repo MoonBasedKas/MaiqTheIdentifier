@@ -11,6 +11,7 @@ import net
 import faceData
 import os 
 
+print(torch.cuda.is_available())
 
 def main():
     

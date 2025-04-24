@@ -36,8 +36,8 @@ def train_epoch():
         optimizer.step()
 
         if batch % 2 == 1:
-            avgLossAcrossBatches = runningLoss/500
-            avgAcrossBatches = (runningAccuracy/500)*100
+            avgLossAcrossBatches = runningLoss/2
+            avgAcrossBatches = (runningAccuracy/2)*100
             print("Batch", batch)
             print("Loss:", avgLossAcrossBatches)
             print("Accuracy:",avgAcrossBatches)
