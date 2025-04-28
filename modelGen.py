@@ -44,6 +44,7 @@ def train_epoch():
     net.train(True)
     runningLoss = 0.0
     runningAccuracy = 0.0
+    batches = 0
 
     # Iterate over the trained data
     print("-")
@@ -63,15 +64,16 @@ def train_epoch():
         runningLoss += loss.item()
         loss.backward()
         optimizer.step()
-    
+        batches += 1
         if batch % 100 == 1:
-            avgLossAcrossBatches = runningLoss/2
-            avgAcrossBatches = (runningAccuracy/2)*100
+            avgLossAcrossBatches = runningLoss/batches
+            avgAcrossBatches = (runningAccuracy/batches)*100
             print("Batch", batch)
             print("Loss:", avgLossAcrossBatches)
             print(color.GREEN + "Accuracy:",avgAcrossBatches, color.RESET)
             runningAccuracy = 0
             runningLoss = 0
+            batches = 0
 
     print("-")
 
