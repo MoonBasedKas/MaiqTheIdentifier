@@ -35,6 +35,10 @@ class color:
     LIGHT_WHITE = '\033[1;37m'
     RESET = '\033[0m'
 
+
+"""
+Performs the training of one epoch for the AI.
+"""
 def train_epoch():
     # Begin learning
     net.train(True)
@@ -71,11 +75,16 @@ def train_epoch():
 
     print("-")
 
+
+"""
+Tests the accuracy of the AI.
+"""
 def validate_epoch():
     # Disable training
     net.train(False)
     runningLoss = 0.0
     runningAccuracy = 0.0
+    col = None
 
     # Iterate over the test data
     for batch, data  in enumerate(testloader):
@@ -100,7 +109,15 @@ def validate_epoch():
         avgAcrossBatches = (runningAccuracy/len(testloader))*100
         print("Batch", batch)
         print("Loss:", avgLossAcrossBatches)
-        print(color.YELLOW + "Accuracy:",avgAcrossBatches, color.RESET)
+        if avgAcrossBatches < 20:
+            col = color.RED
+        elif avgAcrossBatches < 60:
+            col = color.YELLOW
+        elif avgAcrossBatches < 85:
+            col = color.LIGHT_PURPLE
+        else:
+            col = color.GREEN
+        print(col + "Accuracy:",avgAcrossBatches, color.RESET)
         runningAccuracy = 0
         runningLoss = 0
 
@@ -148,7 +165,7 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
 
 
 
-classes = ('Not Steve', 'Steve')
+classes = ('Unknown', 'Maiq')
 
 
 # Colored images have 3 channels
@@ -183,6 +200,7 @@ net = net.neuralNet()
 criterion = nn.CrossEntropyLoss()
 # Erik said this adam guy is like magic, lr: learning rate
 optimizer = optim.Adam(net.parameters(), lr=0.001)
+# NOTE: parameter stuff.
 # for i, data in enumerate(trainloader, 0):
 #         # get the inputs; data is a list of [inputs, labels]
 #         inputs, labels = data
@@ -194,28 +212,17 @@ for x in net.parameters():
      z += len(torch.flatten(x))
 print("Params", z)
 
-# Training loop
+# Epic training loop
 epic = 10
 for epoch in range(epic):
     print("-----")
-    print(color.BLUE + "epoch:", epoch, color.RESET)
+    print(color.BLUE + "epoch:", epoch + 1, color.RESET)
 
     train_epoch()
     validate_epoch()
     print("-----")
 
 
-#         # zero the parameter gradients
-#         # optimizer.zero_grad()
 
-#         # forward + backward + optimize
-#         # outputs = net(inputs)
-#         # loss = criterion(outputs, labels)
-#         # loss.backward()
-#         # optimizer.step()
-
-#         # # print statistics
-#         # running_loss += loss.item()
-#         # if i % 2000 == 1999:    # print every 2000 mini-batches
-#         #     print(f'[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 2000:.3f}')
-#         #     running_loss = 0.0
+PATH = './maiqTheIdentifier.pth'
+torch.save(net.state_dict(), PATH)
