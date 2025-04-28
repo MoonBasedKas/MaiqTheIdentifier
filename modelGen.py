@@ -11,6 +11,30 @@ import net
 import faceData
 import os 
 
+
+"""
+Color information to improve readability.
+"""
+class color:
+    RED = '\033[31m'
+    BLACK = "\033[0;30m"
+    RED = '\033[0;31m'
+    GREEN = '\033[0;32m'
+    BROWN = '\033[0;33m'
+    BLUE = '\033[0;34m'
+    PURPLE = '\033[0;35m'
+    CYAN = '\033[0;36m'
+    LIGHT_GRAY = '\033[0;37m'
+    DARK_GRAY = '\033[1;30m'
+    LIGHT_RED = '\033[1;31m'
+    LIGHT_GREEN = '\033[1;32m'
+    YELLOW = '\033[1;33m'
+    LIGHT_BLUE = '\033[1;34m'
+    LIGHT_PURPLE = '\033[1;35m'
+    LIGHT_CYAN = '\033[1;36m'
+    LIGHT_WHITE = '\033[1;37m'
+    RESET = '\033[0m'
+
 def train_epoch():
     # Begin learning
     net.train(True)
@@ -18,6 +42,7 @@ def train_epoch():
     runningAccuracy = 0.0
 
     # Iterate over the trained data
+    print("-")
     for batch, data  in enumerate(trainloader):
         inputs, labels = data[0].to(device), data[1].to(device)
 
@@ -34,20 +59,20 @@ def train_epoch():
         runningLoss += loss.item()
         loss.backward()
         optimizer.step()
-
-        if batch % 2 == 1:
+    
+        if batch % 100 == 1:
             avgLossAcrossBatches = runningLoss/2
             avgAcrossBatches = (runningAccuracy/2)*100
             print("Batch", batch)
             print("Loss:", avgLossAcrossBatches)
-            print("Accuracy:",avgAcrossBatches)
+            print(color.GREEN + "Accuracy:",avgAcrossBatches, color.RESET)
             runningAccuracy = 0
             runningLoss = 0
 
     print("-")
 
 def validate_epoch():
-    # Disable
+    # Disable training
     net.train(False)
     runningLoss = 0.0
     runningAccuracy = 0.0
@@ -71,11 +96,11 @@ def validate_epoch():
 
 
         # 4 is batches
-        avgLossAcrossBatches = runningLoss/4
-        avgAcrossBatches = (runningAccuracy/4)*100
+        avgLossAcrossBatches = runningLoss/len(testloader)
+        avgAcrossBatches = (runningAccuracy/len(testloader))*100
         print("Batch", batch)
         print("Loss:", avgLossAcrossBatches)
-        print("Accuracy:",avgAcrossBatches)
+        print(color.YELLOW + "Accuracy:",avgAcrossBatches, color.RESET)
         runningAccuracy = 0
         runningLoss = 0
 
@@ -102,8 +127,10 @@ transform = transforms.Compose([
 batch_size = 4
 
 # This gets the data set?
-
-trainset = faceData.CustomImageDataset(f"data{os.sep}labels.csv", f"data{os.sep}images", transform=transform)
+labelPath = "." + os.sep + "labels.csv"
+imagePath = "." + os.sep + "scrapedData"
+trainset = faceData.CustomImageDataset(labelPath, imagePath, transform=transform)
+trainset, testset = torch.utils.data.random_split(trainset, [len(trainset) - 20, 20])
 # This loads it into torch to train?
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
                                           shuffle=True)
@@ -114,10 +141,12 @@ trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
 # testset = torchvision.datasets.CIFAR10(root='./data', train=False,
 #                                        download=True, transform=transform)
 
-testset = faceData.CustomImageDataset(f".{os.sep}data{os.sep}train.csv", f".{os.sep}data{os.sep}training", transform=transform)
+# testset = faceData.CustomImageDataset(f".{os.sep}data{os.sep}train.csv", f".{os.sep}data{os.sep}training", transform=transform)
 
 testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
                                          shuffle=False)
+
+
 
 classes = ('Not Steve', 'Steve')
 
@@ -134,13 +163,12 @@ def imshow(img):
 dataiter = iter(trainloader)
 images, labels = next(dataiter)
 # Gets me my shape fo
-print(images.shape)
+# print(images.shape) NOTE: Use when need to find new size.
 # tset, vset = torch.utils.random_split(trainset, [5,3]) # Splits the dataset
 
 print(torch.min(images), torch.max(images))
 
 # show images
-print(len(trainset))
 imshow(torchvision.utils.make_grid(images))
 # print labels
 print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size)))
@@ -155,11 +183,11 @@ net = net.neuralNet()
 criterion = nn.CrossEntropyLoss()
 # Erik said this adam guy is like magic, lr: learning rate
 optimizer = optim.Adam(net.parameters(), lr=0.001)
-for i, data in enumerate(trainloader, 0):
-        # get the inputs; data is a list of [inputs, labels]
-        inputs, labels = data
-        print(inputs.shape)
-        print(net(inputs).shape)
+# for i, data in enumerate(trainloader, 0):
+#         # get the inputs; data is a list of [inputs, labels]
+#         inputs, labels = data
+#         print(inputs.shape)
+#         print(net(inputs).shape)
 # Our params
 z = 0
 for x in net.parameters():
@@ -169,11 +197,12 @@ print("Params", z)
 # Training loop
 epic = 10
 for epoch in range(epic):
-    print("epoch:", epoch)
+    print("-----")
+    print(color.BLUE + "epoch:", epoch, color.RESET)
 
     train_epoch()
     validate_epoch()
-
+    print("-----")
 
 
 #         # zero the parameter gradients

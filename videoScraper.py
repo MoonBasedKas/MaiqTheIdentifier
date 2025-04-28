@@ -51,6 +51,7 @@ def ripAndTear(src, dest, name):
     capture = cv2.VideoCapture(src)
     temp = ""
     frames = 1
+    sucs = 0
     t = time.time()
     t = int(t)
     while (True):
@@ -58,9 +59,12 @@ def ripAndTear(src, dest, name):
         success, frame = capture.read()
     
         if success:
-            temp += name + str(t) + str(frames) + ".jpg"
-            cv2.imwrite(temp, frame)
-            frames += frames
+            sucs += 1
+            if sucs >= 30:
+                temp += name + str(t) + str(frames) + ".jpg"
+                cv2.imwrite(temp, frame)
+                frames += frames
+                sucs = 0
     
         else:
             break

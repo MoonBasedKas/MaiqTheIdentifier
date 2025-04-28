@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
 import sys
+import os
 
 def main():
     argv = sys.argv
     label = 0
     dirs = []
     out = "labels.csv"
-    dest = "./"
+    dest = "." + os.sep
     while argv != []:
         temp = argv.pop(0)
         if temp == "-help":
@@ -23,8 +24,31 @@ def main():
             dest = argv.pop(0)
         elif temp == "-o":
             out = argv.pop(0)
+    files = []
+    while dirs != []:
+        files += getDir(dirs.pop(0))
+
+    if dest[-1] != os.sep:
+        dest += os.sep + out
+    else:
+        dest += out
+    writeLabels(files, label, dest)
+
+    
+
+def writeLabels(files, label, dest):
+    fp = open(dest, "a")
+    for i in files:
+        fp.write(f"{i},{label}\n")
+    fp.close()
 
 
+def getDir(dirs):
+    d = os.listdir(dirs)
+    f = []
+    for x in d:
+        f.append(x)
+    return f
 
 if __name__ == "__main__":
     main()
