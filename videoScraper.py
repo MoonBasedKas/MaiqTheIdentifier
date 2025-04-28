@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 import sys
 import cv2
- 
+import os
 
 def main():
     temp = None
     argv = sys.argv
-    dest = "./"
+    dest = "." + os.sep
     name = "frame"
     files = []
     while(argv != []):
@@ -17,13 +17,27 @@ def main():
             print("-name [name]: What each file will be named")
         elif temp == "-dest":
             dest = argv.pop(0)
+        elif temp == "-dir":
+            files += getDir(argv.pop(0))
         elif temp == "-name":
             name = argv.pop(0)
         else:
             files.append(temp)
 
     while(files != []):
+        print(files)
         ripAndTear(files.pop(0), dest, name)
+
+
+"""
+Does it for a specific video
+"""
+def getDir(dirs):
+    d = os.listdir(dirs)
+    f = []
+    for x in d:
+        f.append(dirs + os.sep + x)
+    return f
 
 
 """
