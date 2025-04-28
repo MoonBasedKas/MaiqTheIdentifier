@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import cv2
+import time
 import os
 
 def main():
@@ -50,13 +51,14 @@ def ripAndTear(src, dest, name):
     capture = cv2.VideoCapture(src)
     temp = ""
     frames = 1
-    
+    t = time.time()
+    t = int(t)
     while (True):
         temp = dest
         success, frame = capture.read()
     
         if success:
-            temp += name + str(frames) + ".jpg"
+            temp += name + str(t) + str(frames) + ".jpg"
             cv2.imwrite(temp, frame)
             frames += frames
     
