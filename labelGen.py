@@ -49,13 +49,17 @@ def recGrab(d, dest):
     dirs = os.listdir(d[0])
     files = []
     temp = []
+    labels = []
     for folder in dirs:
+        labels.append([folder, label])
         temp = os.listdir(d[0] + folder)
         for file in temp:
             files.append([file, label])
         label += 1
     fp = open(dest, "w")
     for i in files:
+        fp.write(f"{i[0]},{i[1]}\n")
+    for i in labels:
         fp.write(f"{i[0]},{i[1]}\n")
     fp.close()
 
