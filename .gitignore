@@ -14,3 +14,7 @@ skyrimvideos/*
 maiq/*
 scrapedData/*
 *.pth
+lfw-dataset.zip
+lfw-dataset/*
+testData/*
+t.csv

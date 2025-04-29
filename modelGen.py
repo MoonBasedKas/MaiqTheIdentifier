@@ -146,8 +146,8 @@ transform = transforms.Compose([
 batch_size = 4
 
 # This gets the data set?
-labelPath = "." + os.sep + "labels.csv"
-imagePath = "." + os.sep + "scrapedData"
+labelPath = "." + os.sep + "t.csv"
+imagePath = "." + os.sep + "testData"
 trainset = faceData.CustomImageDataset(labelPath, imagePath, transform=transform)
 trainset, testset = torch.utils.data.random_split(trainset, [len(trainset) - 20, 20])
 # This loads it into torch to train?
@@ -188,9 +188,9 @@ images, labels = next(dataiter)
 print(torch.min(images), torch.max(images))
 
 # show images
-imshow(torchvision.utils.make_grid(images))
+# imshow(torchvision.utils.make_grid(images))
 # print labels
-print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size)))
+# print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size)))
 
 # Creates the neural network.
 

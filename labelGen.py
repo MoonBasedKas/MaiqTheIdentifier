@@ -9,6 +9,7 @@ def main():
     dirs = []
     out = "labels.csv"
     dest = "." + os.sep
+    rec = False
     while argv != []:
         temp = argv.pop(0)
         if temp == "-help":
@@ -24,17 +25,39 @@ def main():
             dest = argv.pop(0)
         elif temp == "-o":
             out = argv.pop(0)
+        elif temp == "-rec":
+            rec = True
     files = []
-    while dirs != []:
-        files += getDir(dirs.pop(0))
+    if rec:
+        recGrab(dirs, dest)
+        return 0
+    
+
 
     if dest[-1] != os.sep:
         dest += os.sep + out
     else:
+        while dirs != []:
+            files += getDir(dirs.pop(0))
         dest += out
     writeLabels(files, label, dest)
 
-    
+def recGrab(d, dest):
+    label = 0
+    print(d)
+    dirs = os.listdir(d[0])
+    files = []
+    temp = []
+    for folder in dirs:
+        temp = os.listdir(d[0] + folder)
+        for file in temp:
+            files.append([file, label])
+        label += 1
+    fp = open(dest, "w")
+    for i in files:
+        fp.write(f"{i[0]},{i[1]}\n")
+    fp.close()
+
 
 def writeLabels(files, label, dest):
     fp = open(dest, "a")
