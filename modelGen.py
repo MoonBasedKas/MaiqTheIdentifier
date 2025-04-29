@@ -7,7 +7,7 @@ import torch.nn.functional as F
 import torchvision.transforms as transforms
 import torch.optim as optim
 import sys
-import net
+import maiqNet
 import faceData
 import os 
 
@@ -41,7 +41,7 @@ Performs the training of one epoch for the AI.
 """
 def train_epoch():
     # Begin learning
-    net.train(True)
+    maiqNet.train(True)
     runningLoss = 0.0
     runningAccuracy = 0.0
     batches = 0
@@ -53,7 +53,7 @@ def train_epoch():
 
         # Reset the gradents
         optimizer.zero_grad()
-        outputs = net(inputs) # Gets our shape, size, shape(2)
+        outputs = maiqNet(inputs) # Gets our shape, size, shape(2)
         # The highest value of this will be the most likely, it'll be the index of it.
         # Gets us the labels of the images where it matches
         correct = torch.sum(labels == torch.argmax(outputs, dim=1)).item()
@@ -83,7 +83,7 @@ Tests the accuracy of the AI.
 """
 def validate_epoch():
     # Disable training
-    net.train(False)
+    maiqNet.train(False)
     runningLoss = 0.0
     runningAccuracy = 0.0
     col = None
@@ -93,7 +93,7 @@ def validate_epoch():
         inputs, labels = data[0].to(device), data[1].to(device)
 
         with torch.no_grad():
-            outputs = net(inputs)
+            outputs = maiqNet(inputs)
             correct = torch.sum(labels == torch.argmax(outputs, dim=1)).item()
 
         # The highest value of this will be the most likely, it'll be the index of it.
@@ -197,13 +197,13 @@ imshow(torchvision.utils.make_grid(images))
 # Creates the neural network.
 
 
-net = net.neuralNet()
+maiqNet = maiqNet.neuralNet()
 # net.to(device) # Enables gpu
 
 
 criterion = nn.CrossEntropyLoss()
 # Erik said this adam guy is like magic, lr: learning rate
-optimizer = optim.Adam(net.parameters(), lr=0.001)
+optimizer = optim.Adam(maiqNet.parameters(), lr=0.001)
 # NOTE: parameter stuff.
 # for i, data in enumerate(trainloader, 0):
 #         # get the inputs; data is a list of [inputs, labels]
@@ -212,7 +212,7 @@ optimizer = optim.Adam(net.parameters(), lr=0.001)
 #         print(net(inputs).shape)
 # Our params
 z = 0
-for x in net.parameters():
+for x in maiqNet.parameters():
      z += len(torch.flatten(x))
 print("Params", z)
 
@@ -229,4 +229,4 @@ for epoch in range(epic):
 
 
 PATH = './maiqTheIdentifier.pth'
-torch.save(net.state_dict(), PATH)
+torch.save(maiqNet.state_dict(), PATH)
