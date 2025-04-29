@@ -3,6 +3,7 @@ import pandas as pd
 from torchvision.io import read_image
 from torch.utils.data.dataset import Dataset
 
+# TODO: Make a cli tool to generate the label map.
 labels_map = {
     0: "Not Steve",
     1: "Steve"

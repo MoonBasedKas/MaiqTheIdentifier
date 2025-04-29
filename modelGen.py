@@ -87,7 +87,7 @@ def validate_epoch():
     runningLoss = 0.0
     runningAccuracy = 0.0
     col = None
-
+    print("Eval:")
     # Iterate over the test data
     for batch, data  in enumerate(testloader):
         inputs, labels = data[0].to(device), data[1].to(device)
@@ -106,24 +106,26 @@ def validate_epoch():
             runningLoss += loss.item()
 
 
-        # 4 is batches
-        avgLossAcrossBatches = runningLoss/len(testloader)
-        avgAcrossBatches = (runningAccuracy/len(testloader))*100
-        print("Batch", batch)
-        print("Loss:", avgLossAcrossBatches)
-        if avgAcrossBatches < 20:
-            col = color.RED
-        elif avgAcrossBatches < 40:
-            col = color.YELLOW
-        elif avgAcrossBatches < 60:
-            col = color.PURPLE
-        elif avgAcrossBatches < 80:
-            col = color.LIGHT_PURPLE
-        else:
-            col = color.GREEN
-        print(col + "Accuracy:",avgAcrossBatches, color.RESET)
-        runningAccuracy = 0
-        runningLoss = 0
+    # I'm not sure if this is meant to be indented left or right.
+    # Because the model seems to max out at 20 when indendented.
+    avgLossAcrossBatches = runningLoss/len(testloader)
+    avgAcrossBatches = (runningAccuracy/len(testloader))*100
+    
+    print("Batch", batch)
+    print("Loss:", avgLossAcrossBatches)
+    if avgAcrossBatches < 20:
+        col = color.RED
+    elif avgAcrossBatches < 40:
+        col = color.YELLOW
+    elif avgAcrossBatches < 60:
+        col = color.PURPLE
+    elif avgAcrossBatches < 80:
+        col = color.LIGHT_PURPLE
+    else:
+        col = color.GREEN
+    print(col + "Accuracy:",avgAcrossBatches, color.RESET)
+    runningAccuracy = 0
+    runningLoss = 0
 
 
 
