@@ -4,7 +4,7 @@ import sys
 import os
 
 def main():
-    moveFiles(".\\lfw-dataset\\lfw-deepfunneled\\lfw-deepfunneled", ".\\testData")
+    moveFiles(".\\deframed", ".\\testData")
 
 def moveFiles(target, dest):
     dirs = os.listdir(target)

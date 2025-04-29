@@ -17,6 +17,7 @@ def main():
             print("-dir [name]: What directory are we taking from")
             print("-dest [name]: Where are the folders being moved to")
             print("-o [name]: what should the label file be named")
+            print("-rec: Recurssive label generation, generates labels based upon directories.")
         elif temp == "-label":
             label = int(argv.pop(0))
         elif temp == "-dir":

@@ -146,10 +146,10 @@ transform = transforms.Compose([
 batch_size = 4
 
 # This gets the data set?
-labelPath = "." + os.sep + "t.csv"
+labelPath = "." + os.sep + "labels.csv"
 imagePath = "." + os.sep + "testData"
 trainset = faceData.CustomImageDataset(labelPath, imagePath, transform=transform)
-trainset, testset = torch.utils.data.random_split(trainset, [len(trainset) - 20, 20])
+trainset, testset = torch.utils.data.random_split(trainset, [len(trainset) - 40, 40])
 # This loads it into torch to train?
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
                                           shuffle=True)
