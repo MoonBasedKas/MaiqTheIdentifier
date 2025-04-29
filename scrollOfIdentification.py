@@ -1,0 +1,93 @@
+"""
+This file provicdes an API for calling the model. This will load the model and allow it to begin identification on various parameters.
+
+TODO: Image translation to jpg type.
+"""
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+import torch
+import torchvision
+import torch.nn as nn
+import torch.nn.functional as F
+import torchvision.transforms as transforms
+import torch.optim as optim
+import sys
+import maiqNet
+import faceData
+import os 
+import numpy as np
+from PIL import Image
+
+# Labels to be changed
+labels = {
+    0: "ahkari",
+    1: "jzargo",
+    2: "khaji",
+    3: "mandran",
+    4: "maiq",
+    5: "risaad"
+}
+
+# Processes an image for input.
+ImageProcessor = transforms.Compose([
+    transforms.ToPILImage(),
+    transforms.Resize((128,128)),
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))],  
+)
+
+def main():
+    argv = sys.argv
+    temp = ""
+    modelpth = "." + os.sep + "maiqTheIdentifier.pth"
+    ioMethod = fileIO
+    test = "cat.jpg"
+    while argv != []:
+        temp = argv.pop(0)
+        if temp == "-model":
+            modelpth = argv.pop(0)
+        elif temp == "-fileIO":
+            ioMethod = fileIO
+        elif temp == "-internetIO":
+            ioMethod = internetIO
+
+    
+    maiq = maiqNet.neuralNet()
+    optimizer = optim.Adam(maiq.parameters(), lr=0.001)
+    maiq.load_state_dict(torch.load(modelpth, weights_only=True))
+    file = "." + os.sep + test
+    ioMethod(maiq, file)
+
+
+"""
+Asks the great identifier via file IO. A simple offline method but stores much power and 
+attackers must usurp maiq's god like control over the device.
+"""
+def fileIO(maiq : maiqNet.neuralNet, file):
+    global labels
+    fp = Image.open(file)
+    # Don't ask why we convert a PIL image to a numpy array back to a PIL image.
+    person = np.asarray(fp)
+    
+    person = ImageProcessor(person)
+    person = person.unsqueeze(0)
+    print(person.shape)
+    with torch.no_grad():
+        result = maiq(person)
+        # Check dimension 1
+        result = torch.argmax(result, dim=1)
+        result = result.item()
+        print(labels[result])
+
+
+
+def internetIO(maiq):
+    
+    return
+
+
+
+if __name__ == "__main__":
+    main()

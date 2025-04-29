@@ -18,3 +18,4 @@ lfw-dataset.zip
 lfw-dataset/*
 testData/*
 t.csv
+*.png

@@ -1,3 +1,6 @@
+"""
+Trains Maiq the Identifier to Identify faces like no other.
+"""
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -137,9 +140,9 @@ def main():
 
     pass
 
+# The magic model
 transform = transforms.Compose([
     transforms.ToPILImage(),
-    # transforms.Resize((28,28)),
     transforms.Resize((128,128)),
     transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))],
@@ -171,7 +174,7 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size,
 
 
 
-classes = ('Unknown', 'Maiq')
+# classes = ('Unknown', 'Maiq')
 
 
 # Colored images have 3 channels
@@ -189,10 +192,10 @@ images, labels = next(dataiter)
 # print(images.shape) NOTE: Use when need to find new size.
 # tset, vset = torch.utils.random_split(trainset, [5,3]) # Splits the dataset
 
-print(torch.min(images), torch.max(images))
+# print(torch.min(images), torch.max(images))
 
 # show images
-imshow(torchvision.utils.make_grid(images))
+# imshow(torchvision.utils.make_grid(images))
 # print labels
 # print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size)))
 

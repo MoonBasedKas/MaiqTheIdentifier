@@ -1,3 +1,6 @@
+"""
+The intelligence of Maiq the Identifier.
+"""
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
