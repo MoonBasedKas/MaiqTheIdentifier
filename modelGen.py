@@ -113,9 +113,11 @@ def validate_epoch():
         print("Loss:", avgLossAcrossBatches)
         if avgAcrossBatches < 20:
             col = color.RED
-        elif avgAcrossBatches < 60:
+        elif avgAcrossBatches < 40:
             col = color.YELLOW
-        elif avgAcrossBatches < 85:
+        elif avgAcrossBatches < 60:
+            col = color.PURPLE
+        elif avgAcrossBatches < 80:
             col = color.LIGHT_PURPLE
         else:
             col = color.GREEN
