@@ -20,6 +20,29 @@ import os
 import numpy as np
 from PIL import Image
 
+"""
+Color information to improve readability.
+"""
+class color:
+    RED = '\033[31m'
+    BLACK = "\033[0;30m"
+    RED = '\033[0;31m'
+    GREEN = '\033[0;32m'
+    BROWN = '\033[0;33m'
+    BLUE = '\033[0;34m'
+    PURPLE = '\033[0;35m'
+    CYAN = '\033[0;36m'
+    LIGHT_GRAY = '\033[0;37m'
+    DARK_GRAY = '\033[1;30m'
+    LIGHT_RED = '\033[1;31m'
+    LIGHT_GREEN = '\033[1;32m'
+    YELLOW = '\033[1;33m'
+    LIGHT_BLUE = '\033[1;34m'
+    LIGHT_PURPLE = '\033[1;35m'
+    LIGHT_CYAN = '\033[1;36m'
+    LIGHT_WHITE = '\033[1;37m'
+    RESET = '\033[0m'
+
 # Labels to be changed
 labels = {
     0: "ahkari",
@@ -67,19 +90,26 @@ attackers must usurp maiq's god like control over the device.
 """
 def fileIO(maiq : maiqNet.neuralNet, file):
     global labels
-    fp = Image.open(file)
-    # Don't ask why we convert a PIL image to a numpy array back to a PIL image.
-    person = np.asarray(fp)
-    
-    person = ImageProcessor(person)
-    person = person.unsqueeze(0)
-    print(person.shape)
-    with torch.no_grad():
-        result = maiq(person)
-        # Check dimension 1
-        result = torch.argmax(result, dim=1)
-        result = result.item()
-        print(labels[result])
+    i = ""
+    while i != "q":
+        i = input("Enter a file: ")
+        try:
+            fp = Image.open(i)
+            # Don't ask why we convert a PIL image to a numpy array back to a PIL image.
+            person = np.asarray(fp)
+            
+            person = ImageProcessor(person)
+            person = person.unsqueeze(0)
+            print(person.shape)
+            with torch.no_grad():
+                result = maiq(person)
+                # Check dimension 1
+                result = torch.argmax(result, dim=1)
+                result = result.item()
+                print(labels[result])
+        except FileNotFoundError:
+            if i != "q":
+                print(color.RED + "Error | File not found." + color.RESET)
 
 
 
