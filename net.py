@@ -38,7 +38,7 @@ class neuralNet(nn.Module):
         self.fc2 = nn.Linear(in_features=1024, out_features=1024)
         self.drop2 = nn.Dropout(p=.3)
 
-        things = 2 # Our labels
+        things = 6 # Our labels
         # Collapses our great filter into a values
         self.out = nn.Linear(in_features=1024, out_features=things)
 
@@ -56,11 +56,12 @@ class neuralNet(nn.Module):
         x = F.relu(self.conv3(x)) 
         x = self.pool3(x)
         x = self.flatten(x)
-        # x = F.relu(self.fc1(x))
-        # x = self.drop1(x)
-        # x = F.relu(self.fc2(x))
-        # x = self.drop2(x)
-        # x = self.out(x)
+        x = F.relu(self.fc1(x))
+        x = self.drop1(x)
+        x = F.relu(self.fc2(x))
+        x = self.drop2(x)
+        x = self.out(x)
+
         # x = self.pool(F.relu(self.conv1(x)))
         # x = self.pool(F.relu(self.conv2(x)))
         # x = torch.flatten(x, 1) # flatten all dimensions except batch

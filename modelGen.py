@@ -65,7 +65,7 @@ def train_epoch():
         loss.backward()
         optimizer.step()
         batches += 1
-        if batch % 100 == 1:
+        if batch % 100 == 3:
             avgLossAcrossBatches = runningLoss/batches
             avgAcrossBatches = (runningAccuracy/batches)*100
             print("Batch", batch)
@@ -143,7 +143,7 @@ transform = transforms.Compose([
 
 # transform = transforms.ToTensor()
 
-batch_size = 4
+batch_size = 8
 
 # This gets the data set?
 labelPath = "." + os.sep + "labels.csv"
@@ -188,7 +188,7 @@ images, labels = next(dataiter)
 print(torch.min(images), torch.max(images))
 
 # show images
-# imshow(torchvision.utils.make_grid(images))
+imshow(torchvision.utils.make_grid(images))
 # print labels
 # print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size)))
 
