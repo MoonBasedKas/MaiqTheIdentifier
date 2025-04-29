@@ -7,7 +7,7 @@ import torch.nn.functional as F
 import torchvision.transforms as transforms
 import torch.optim as optim
 import sys
-import net
+import maiqNet
 import faceData
 import os 
 
@@ -76,12 +76,12 @@ print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size)))
 # Creates the neural network.
 
 
-net = net.neuralNet()
+maiqNet = maiqNet.neuralNet()
 # net.to(device) # Enables gpu
 
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+optimizer = optim.SGD(maiqNet.parameters(), lr=0.001, momentum=0.9)
 
 
 for epoch in range(2):  # loop over the dataset multiple times
@@ -96,7 +96,7 @@ for epoch in range(2):  # loop over the dataset multiple times
         optimizer.zero_grad()
 
         # forward + backward + optimize
-        outputs = net(inputs)
+        outputs = maiqNet(inputs)
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
@@ -111,7 +111,7 @@ print('Finished Training')
 
 # Saves the model, that's cool.
 PATH = './steve.pth'
-torch.save(net.state_dict(), PATH)
+torch.save(maiqNet.state_dict(), PATH)
 
 
 taiter = iter(testloader)
@@ -121,10 +121,10 @@ images, labels = next(dataiter)
 imshow(torchvision.utils.make_grid(images))
 print('GroundTruth: ', ' '.join(f'{classes[labels[j]]:5s}' for j in range(4)))
 
-net = net.Net()
-net.load_state_dict(torch.load(PATH, weights_only=True))
+maiqNet = maiqNet.Net()
+maiqNet.load_state_dict(torch.load(PATH, weights_only=True))
 
-outputs = net(images)
+outputs = maiqNet(images)
 
 _, predicted = torch.max(outputs, 1)
 
@@ -139,7 +139,7 @@ with torch.no_grad():
     for data in testloader:
         images, labels = data
         # calculate outputs by running images through the network
-        outputs = net(images)
+        outputs = maiqNet(images)
         # the class with the highest energy is what we choose as prediction
         _, predicted = torch.max(outputs, 1)
         total += labels.size(0)
@@ -156,7 +156,7 @@ total_pred = {classname: 0 for classname in classes}
 with torch.no_grad():
     for data in testloader:
         images, labels = data
-        outputs = net(images)
+        outputs = maiqNet(images)
         _, predictions = torch.max(outputs, 1)
         # collect the correct predictions for each class
         for label, prediction in zip(labels, predictions):
