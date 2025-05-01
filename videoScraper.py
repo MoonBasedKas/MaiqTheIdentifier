@@ -10,6 +10,7 @@ def main():
     dest = "." + os.sep
     name = "frame"
     files = []
+    argv.pop(0)
     while(argv != []):
         temp = argv.pop(0)
         if temp == "-help":
@@ -54,17 +55,20 @@ def ripAndTear(src, dest, name):
     sucs = 0
     t = time.time()
     t = int(t)
+    face = False
     while (True):
         temp = dest
         success, frame = capture.read()
-    
+        
         if success:
             sucs += 1
-            if sucs >= 30:
-                temp += name + str(t) + str(frames) + ".jpg"
-                cv2.imwrite(temp, frame)
-                frames += frames
-                sucs = 0
+            face = detectFace(frame)
+            if face:
+                if sucs >= 30:
+                    temp += name + str(t) + "-" + str(frames) + ".jpg"
+                    cv2.imwrite(temp, frame)
+                    frames += frames
+                    sucs = 0
     
         else:
             break
@@ -72,6 +76,20 @@ def ripAndTear(src, dest, name):
         
     
     capture.release()
+
+"""
+Detemines if there is a face in the video.
+"""
+def detectFace(frame):
+    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    face = face_cascade.detectMultiScale(gray, 1.3, 5)
+    try: 
+        if face == ():
+            return False
+    except:
+
+        return True
 
 if __name__ == "__main__":
     main()
