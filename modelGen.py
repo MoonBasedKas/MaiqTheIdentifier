@@ -88,7 +88,7 @@ def train_epoch():
             else:
                 col = color.LIGHT_RED
             
-            print(color.GREEN + "Accuracy:",avgAcrossBatches, color.RESET)
+            print(col + "Accuracy:",avgAcrossBatches, color.RESET)
             runningAccuracy = 0
             runningLoss = 0
             batches = 0
