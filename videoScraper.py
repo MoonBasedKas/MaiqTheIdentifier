@@ -67,7 +67,7 @@ def ripAndTear(src, dest, name):
                 if sucs >= 30:
                     temp += name + str(t) + "-" + str(frames) + ".jpg"
                     cv2.imwrite(temp, frame)
-                    frames += frames
+                    frames += 1
                     sucs = 0
     
         else:
