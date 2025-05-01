@@ -46,12 +46,9 @@ class color:
 
 # Labels to be changed
 labels = {
-    0: "ahkari",
-    1: "j'zargo",
-    2: "khaji",
-    3: "ma'dran",
-    4: "m'aiq",
-    5: "r'isaad"
+    0: "Gordon",
+    1: "Scott",
+    2: "Guy"
 }
 
 # Processes an image for input.
