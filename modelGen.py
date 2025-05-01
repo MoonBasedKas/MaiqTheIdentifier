@@ -80,7 +80,7 @@ def train_epoch():
             elif avgAcrossBatches < 40:
                 col = color.YELLOW
             elif avgAcrossBatches < 60:
-                col = color.PURPLE
+                col = color.LIGHT_PURPLE
             elif avgAcrossBatches < 80:
                 col = color.BLUE
             elif avgAcrossBatches < 100:
@@ -105,7 +105,7 @@ def validate_epoch():
     runningLoss = 0.0
     runningAccuracy = 0.0
     col = None
-    print("Eval:")
+    print(color.LIGHT_BLUE + "Eval:" + color.RESET)
     # Iterate over the test data
     for batch, data  in enumerate(testloader):
         inputs, labels = data[0].to(device), data[1].to(device)
@@ -171,7 +171,10 @@ batch_size = 8
 labelPath = "." + os.sep + "labels.csv"
 imagePath = "." + os.sep + "data"
 trainset = faceData.CustomImageDataset(labelPath, imagePath, transform=transform)
-trainset, testset = torch.utils.data.random_split(trainset, [len(trainset) - 40, 40])
+lim = len(trainset) * .15
+lim = round(lim)
+tlen = len(trainset) - lim
+trainset, testset = torch.utils.data.random_split(trainset, [tlen, lim])
 # This loads it into torch to train?
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size,
                                           shuffle=True)
