@@ -112,7 +112,7 @@ def fileIO(maiq : maiqNet.neuralNet, file):
 
 
 
-def internetIO(maiq):
+def internetIO(maiq : maiqNet.neuralNet):
     
     return
 
