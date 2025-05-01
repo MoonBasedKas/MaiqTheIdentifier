@@ -74,8 +74,9 @@ def main():
         elif temp == "-internetIO":
             ioMethod = internetIO
 
-    
+    print("Loading the model.")
     maiq = maiqNet.neuralNet()
+    print("Model has been successfully loaded.")
     optimizer = optim.Adam(maiq.parameters(), lr=0.001)
     maiq.load_state_dict(torch.load(modelpth, weights_only=True))
     file = "." + os.sep + test
