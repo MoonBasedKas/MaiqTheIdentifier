@@ -2,9 +2,10 @@
 
 import sys
 import os
+import shutil
 
 def main():
-    moveFiles(".\\deframed", ".\\testData")
+    moveFiles("./faces", "./data")
 
 def moveFiles(target, dest):
     dirs = os.listdir(target)
@@ -14,7 +15,7 @@ def moveFiles(target, dest):
         loc = target+os.sep+folder
         temp = os.listdir(loc)
         for file in temp:
-            os.rename(loc + os.sep + file, dest + os.sep + file)
+            shutil.copy(loc + os.sep + file, dest + os.sep + file)
 
 
 

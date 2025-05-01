@@ -41,7 +41,7 @@ class neuralNet(nn.Module):
         self.fc2 = nn.Linear(in_features=1024, out_features=1024)
         self.drop2 = nn.Dropout(p=.3)
 
-        things = 6 # Our labels
+        things = 3 # Our labels
         # Collapses our great filter into a values
         self.out = nn.Linear(in_features=1024, out_features=things)
 

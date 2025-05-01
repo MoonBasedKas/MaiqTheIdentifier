@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Trains Maiq the Identifier to Identify faces like no other.
 """
@@ -48,6 +49,7 @@ def train_epoch():
     runningLoss = 0.0
     runningAccuracy = 0.0
     batches = 0
+    col = color.RED
 
     # Iterate over the trained data
     print("-")
@@ -73,6 +75,19 @@ def train_epoch():
             avgAcrossBatches = (runningAccuracy/batches)*100
             print("Batch", batch)
             print("Loss:", avgLossAcrossBatches)
+            if avgAcrossBatches < 20:
+                col = color.RED
+            elif avgAcrossBatches < 40:
+                col = color.YELLOW
+            elif avgAcrossBatches < 60:
+                col = color.PURPLE
+            elif avgAcrossBatches < 80:
+                col = color.BLUE
+            elif avgAcrossBatches < 100:
+                col = color.GREEN
+            else:
+                col = color.LIGHT_RED
+            
             print(color.GREEN + "Accuracy:",avgAcrossBatches, color.RESET)
             runningAccuracy = 0
             runningLoss = 0
@@ -154,7 +169,7 @@ batch_size = 8
 
 # This gets the data set?
 labelPath = "." + os.sep + "labels.csv"
-imagePath = "." + os.sep + "testData"
+imagePath = "." + os.sep + "data"
 trainset = faceData.CustomImageDataset(labelPath, imagePath, transform=transform)
 trainset, testset = torch.utils.data.random_split(trainset, [len(trainset) - 40, 40])
 # This loads it into torch to train?
