@@ -163,7 +163,7 @@ def TestModel(maiq: maiqNet.neuralNet, *args):
                 print(color.RED + f"Error | File {direct + i} not found." + color.RESET)
     fp = open(name, "w")
     print()
-    fp.write(f"label, predictions\n")
+    fp.write(f"label,predictions\n")
     for i in hits.keys():
         fp.write(f"{labels[i]},{hits[i]}\n")
     return
