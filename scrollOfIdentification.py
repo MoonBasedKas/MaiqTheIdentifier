@@ -104,7 +104,7 @@ def main():
 Asks the great identifier via file IO. A simple offline method but stores much power and 
 attackers must usurp maiq's god like control over the device.
 """
-def fileIO(maiq : maiqNet.neuralNet, file):
+def fileIO(maiq : maiqNet.neuralNet, *args):
     global labels
     i = ""
     while i != "q":
