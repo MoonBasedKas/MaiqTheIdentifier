@@ -86,11 +86,11 @@ def detectFace(frame):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     face = face_cascade.detectMultiScale(gray, 1.3, 5)
     try: 
-        if face == ():
+        if type(face) == tuple:
             return False
     except:
-
-        return True
+        pass
+    return True
 
 if __name__ == "__main__":
     main()
