@@ -51,17 +51,20 @@ labels = {
     2: "Guy"
 }
 
-# Processes an image for input.
+    # Processes an image for input.
 ImageProcessor = transforms.Compose([
-    transforms.ToPILImage(),
-    transforms.Resize((128,128)),
-    transforms.ToTensor(),
-    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))],  
-)
+        transforms.ToPILImage(),
+        transforms.Resize((128,128)),
+        transforms.ToTensor(),
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))],  
+    )
 
 def main():
+    print("Loading the model.")
     argv = sys.argv
     temp = ""
+    label = 0
+    out = ""
     modelpth = "." + os.sep + "maiqTheIdentifier.pth"
     ioMethod = fileIO
     test = "cat.jpg"
@@ -73,14 +76,28 @@ def main():
             ioMethod = fileIO
         elif temp == "-internetIO":
             ioMethod = internetIO
+        elif temp == "-testAccuracy":
+            # Test folder
+            test = argv.pop(0)
+            # Label
+            misc = argv.pop(0)
+            ioMethod = TestModel
+            # Csv to write
+            out = argv.pop(0)
+        elif temp == "-help":
+            print("testAccuracy [test directory] [target label] [csv target]: Enables test mode.")
+            print("-fileIO: Enables file io")
+            print(f"-internetIO: Enables internet based IO NOT {color.RED}IMPLEMENTED{color.RESET}")
+            print("-model [model path]: What model to load.")
+            return 0
 
-    print("Loading the model.")
+    
     maiq = maiqNet.neuralNet()
     print("Model has been successfully loaded.")
     optimizer = optim.Adam(maiq.parameters(), lr=0.001)
     maiq.load_state_dict(torch.load(modelpth, weights_only=True))
-    file = "." + os.sep + test
-    ioMethod(maiq, file)
+    misc = 0
+    ioMethod(maiq, misc, test, out)
 
 
 """
@@ -109,6 +126,47 @@ def fileIO(maiq : maiqNet.neuralNet, file):
         except FileNotFoundError:
             if i != "q":
                 print(color.RED + "Error | File not found." + color.RESET)
+
+"""
+Runs a test on the model with a given target.
+"""
+def TestModel(maiq: maiqNet.neuralNet, *args):
+    global labels
+    label = args[0]
+    direct = args[1]
+    name = args[2]
+    reads = 0
+    hits = {}
+    fp = None
+    files = os.listdir(direct)
+    for i in files:
+        try:
+            reads += 1
+            if reads % 25 == 0:
+                print("Completed", reads, "files.")
+            fp = Image.open(direct + i)
+            # Don't ask why we convert a PIL image to a numpy array back to a PIL image.
+            person = np.asarray(fp)
+            
+            person = ImageProcessor(person)
+            person = person.unsqueeze(0)
+            with torch.no_grad():
+                result = maiq(person)
+                result = torch.argmax(result, dim=1)
+                result = result.item()
+                if result not in hits.keys():
+                    hits[result] = 1
+                else:
+                    hits[result] += 1
+        except FileNotFoundError:
+            if i != "q":
+                print(color.RED + f"Error | File {direct + i} not found." + color.RESET)
+    fp = open(name, "w")
+    print()
+    fp.write(f"label, predictions\n")
+    for i in hits.keys():
+        fp.write(f"{labels[i]},{hits[i]}\n")
+    return
 
 
 

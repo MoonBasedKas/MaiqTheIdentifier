@@ -17,6 +17,7 @@ def main():
             print("[name]: What video to break down")
             print("-dest [name]: Where to write each file")
             print("-name [name]: What each file will be named")
+            print("-dir [name]: What dir to place into")
         elif temp == "-dest":
             dest = argv.pop(0)
         elif temp == "-dir":

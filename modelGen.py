@@ -207,21 +207,11 @@ def imshow(img):
 dataiter = iter(trainloader)
 images, labels = next(dataiter)
 # Gets me my shape fo
-# print(images.shape) NOTE: Use when need to find new size.
-# tset, vset = torch.utils.random_split(trainset, [5,3]) # Splits the dataset
+# print(images.shape) # NOTE: Use when need to find new size.
 
-# print(torch.min(images), torch.max(images))
-
-# show images
-# imshow(torchvision.utils.make_grid(images))
-# print labels
-# print(' '.join(f'{classes[labels[j]]:5s}' for j in range(batch_size)))
-
-# Creates the neural network.
 
 
 maiqNet = maiqNet.neuralNet()
-# net.to(device) # Enables gpu
 
 
 criterion = nn.CrossEntropyLoss()
