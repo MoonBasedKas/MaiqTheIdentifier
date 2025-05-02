@@ -5,7 +5,7 @@ import os
 import shutil
 
 def main():
-    moveFiles("./faces", "./data")
+    moveFiles(".\\faces", ".\\data")
 
 def moveFiles(target, dest):
     dirs = os.listdir(target)
