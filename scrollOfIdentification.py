@@ -47,8 +47,8 @@ class color:
 # Labels to be changed
 labels = {
     0: "Gordon",
-    2: "Scott",
-    1: "Guy"
+    1: "Scott",
+    2: "Guy"
 }
 
     # Processes an image for input.
